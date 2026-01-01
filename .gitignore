@@ -4,12 +4,6 @@
 # Log file
 *.log
 
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
 # Package Files #
 *.jar
 *.war
@@ -23,8 +17,164 @@
 hs_err_pid*
 replay_pid*
 
-### BACKEND ###
-backend/out/
-backend/!**/src/main/**/out/
-backend/!**/src/test/**/out/
-backend/.idea
+# Environment files (frontend/backend)
+.env
+.env.local
+.env.*.local
+.local.env
+.env.production
+.env.development
+.env.test
+
+# Node / package manager auth files
+.npmrc
+.yarnrc
+.yarnrc.yml
+.pnpmrc
+
+# Service account / cloud keys / secrets
+serviceAccount*.json
+*credentials*.json
+*-credentials.json
+*.secret.json
+*.google-services.json
+GoogleService-Info.plist
+
+# Mobile / keystore / certificates
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.pem
+*.key
+*.crt
+*.der
+android/**/keystore.*
+ios/**/secrets.*
+
+# Docker / registry / CI credentials
+.docker/config.json
+.netrc
+# CI token files
+ci-secrets.*
+circleci/*.yml
+
+# Infra & cloud state / creds
+terraform.tfstate
+terraform.tfstate.backup
+*.tfstate
+*.tfstate.backup
+.terraform/
+.aws/
+*.gcloud.json
+.azure/
+
+# Kubernetes configs
+.kube/
+kubeconfig
+kubeconfig.yaml
+
+# Database files and backups
+*.sqlite3
+*.sqlite3-journal
+*.db
+*.sql
+*.dump
+*.bak
+
+# SSH private keys
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+# (avoid ignoring public keys "*.pub" unless intentional)
+
+# Framework-specific secrets
+config/master.key
+config/credentials.yml.enc
+config/secrets.yml
+config/secrets.yml.key
+
+# Fastlane / mobile tooling secrets
+fastlane/credentials.json
+fastlane/ApiKeys.json
+fastlane/**/private_key.json
+
+# Misc sensitive logs / debug files
+npm-debug.log*
+yarn-error.log*
+firebase-debug.log
+
+backend/.env
+backend/*.env
+backend/**/*.env
+backend/.env.local
+backend/.npmrc
+backend/.yarnrc
+backend/.yarnrc.yml
+backend/.pnpmrc
+backend/.docker/config.json
+backend/.terraform/
+backend/terraform.tfstate
+backend/terraform.tfstate.backup
+backend/.aws/
+backend/*.gcloud.json
+backend/.azure/
+backend/kubeconfig
+backend/kubeconfig.yaml
+backend/*.sqlite3
+backend/*.db
+backend/*.key
+backend/*.pem
+backend/*.p12
+backend/*.jks
+backend/*.pfx
+backend/GoogleService-Info.plist
+backend/fastlane/
+backend/config/master.key
+backend/config/credentials.yml.enc
+backend/config/secrets.yml
+backend/config/secrets.yml.key
+backend/.netrc
+backend/id_rsa
+backend/id_ed25519
+backend/npm-debug.log*
+backend/yarn-error.log*
+
+frontend/.env
+frontend/*.env
+frontend/**/*.env
+frontend/.env.local
+frontend/.npmrc
+frontend/.yarnrc
+frontend/.yarnrc.yml
+frontend/.pnpmrc
+frontend/.docker/config.json
+frontend/.keystore
+frontend/*.jks
+frontend/*.p12
+frontend/*.pfx
+frontend/*.pem
+frontend/*.key
+frontend/GoogleService-Info.plist
+frontend/GoogleService-Info.plist.*
+frontend/fastlane/
+frontend/ApiKeys.json
+frontend/fastlane/**/private_key.json
+frontend/.netrc
+frontend/npm-debug.log*
+frontend/yarn-error.log*
+
+**/backend/.env
+**/backend/.npmrc
+**/backend/.docker/config.json
+**/backend/.terraform/
+**/backend/terraform.tfstate*
+**/backend/*.key
+**/backend/*.pem
+
+**/frontend/.env
+**/frontend/.npmrc
+**/frontend/.docker/config.json
+**/frontend/*.keystore
+**/frontend/GoogleService-Info.plist
