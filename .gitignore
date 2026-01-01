@@ -178,3 +178,19 @@ frontend/yarn-error.log*
 **/frontend/.docker/config.json
 **/frontend/*.keystore
 **/frontend/GoogleService-Info.plist
+/.idea/.gitignore
+/backend/target/classes/semantic/AG.txt
+/.idea/compiler.xml
+/.idea/copilot.data.migration.ask2agent.xml
+/.idea/encodings.xml
+/.idea/jarRepositories.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/NovaCode.iml
+/backend/target/classes/codegenerator/Offset AG.txt
+/backend/target/classes/parser/Pmm.g4
+/backend/target/classes/parser/Pmm.interp
+/backend/target/classes/parser/Pmm.tokens
+/backend/target/classes/parser/PmmLexer.interp
+/backend/target/classes/parser/PmmLexer.tokens
+/.idea/vcs.xml
