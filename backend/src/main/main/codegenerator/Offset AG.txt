@@ -1,0 +1,95 @@
+###############################################################################################################
+############################################ Abstract Grammar #################################################
+###############################################################################################################
+
+(1) Program: program -> (vardefinition|funcdefinition)* funcdefinition
+
+(2) VarDefinition: vardefinition -> type ID
+
+(3) FuncDefinition: funcdefinition -> type ID vardefinition* statement*
+
+(4) VoidType: type -> none
+
+(5) IntType: type -> INT
+
+(6) DoubleType: type -> DOUBLE
+
+(7) CharType: type -> CHAR
+
+(8) ArrayType: type1 -> type2 INT_CONSTANT
+
+(9) FunctionType: type1 -> type2 vardefinition*
+
+(10) StructType: type -> field*
+
+(11) Field: field -> type ID
+
+(12) Arithmetic: expression1 -> expression2 (+|-|*|/|%) expression3
+
+(13) Logical: expression1 -> expression2 ('&&'|'||') expression3
+
+(14) Comparison: expression1 -> expression2 (>|>=|<|<=|!=|==) expression3
+
+(15) IntLiteral: expression -> INT_CONSTANT
+
+(16) DoubleLiteral: expression -> REAL_CONSTANT
+
+(17) CharLiteral: expression -> DOUBLE_CONSTANT
+
+(18) Variable: expression -> ID
+
+(19) Cast: expression1 -> type expression2
+
+(20) Not: expression1 -> expression2
+
+(21) Minus: expression1 -> expression2
+
+(22) FunctionInvocation: expression1 -> ID expression*
+
+(23) ArrayAccess: expression1 -> expression2 expression3
+
+(24) StructAccess: expression1 -> expression2 ID
+
+(25) Write: statement -> expression
+
+(26) Read: statement -> expression
+
+(27) Assignment: statement -> expression1 expression2
+
+(28) IfElse: statement1 -> expression statement2* statement3*
+
+(29) While: statement1 -> expression statement2*
+
+(30) Return: statement -> expression
+
+(31) FunctionInvocation: statement1 -> ID statement2*
+
+###############################################################################################################
+######################################### Attribute Grammar ###################################################
+###############################################################################################################
+A:
+    varDefinition.offset
+    field.offset
+
+R:
+    (2) varDefinition.offset = globalsBytesSum
+        globalsBytesSum += type.numberOfBytes
+
+    (3) int localsBytesSum = 0;
+        for(VarDefinition vd : vardefinition*) {
+            localsBytesSum += vd.getType().numberOfBytes;
+            vd.offset = - localsBytesSum;
+        }
+
+    (9) int paramsBytesSum = 0;
+        for(int i = vardefinition*.size() -1; i >= 0; ii--){
+            VarDefinition vd = vardefinition*.get(i);
+            vd.offset = 4 + paramsBytesSum;
+            paramsBytesSum += vd.getType().numberOfBytes;
+        }
+
+    (10) int fieldsBytesSum = 0
+        for(Field rf : fields*) {
+            rf.offset = fieldsBytesSum;
+            fieldsBytesSum += rf.getType().numberOfBytes;
+        }

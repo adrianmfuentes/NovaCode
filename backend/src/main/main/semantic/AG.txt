@@ -1,0 +1,150 @@
+###############################################################################################################
+############################################ Abstract Grammar #################################################
+###############################################################################################################
+
+(1) Program: program -> (vardefinition|funcdefinition)* funcdefinition
+
+(2) VarDefinition: vardefinition -> type ID
+
+(3) FuncDefinition: funcdefinition -> type ID vardefinition* statement*
+
+(4) VoidType: type -> none
+
+(5) IntType: type -> INT
+
+(6) DoubleType: type -> DOUBLE
+
+(7) CharType: type -> CHAR
+
+(8) ArrayType: type1 -> type2 INT_CONSTANT
+
+(9) FunctionType: type1 -> type2 vardefinition*
+
+(10) StructType: type -> field*
+
+(11) Field: field -> type ID
+
+(12) Arithmetic: expression1 -> expression2 (+|-|*|/|%) expression3
+
+(13) Logical: expression1 -> expression2 ('&&'|'||') expression3
+
+(14) Comparison: expression1 -> expression2 (>|>=|<|<=|!=|==) expression3
+
+(15) IntLiteral: expression -> INT_CONSTANT
+
+(16) DoubleLiteral: expression -> REAL_CONSTANT
+
+(17) CharLiteral: expression -> DOUBLE_CONSTANT
+
+(18) Variable: expression -> ID
+
+(19) Cast: expression1 -> type expression2
+
+(20) Not: expression1 -> expression2
+
+(21) Minus: expression1 -> expression2
+
+(22) FunctionInvocation: expression1 -> ID expression*
+
+(23) ArrayAccess: expression1 -> expression2 expression3
+
+(24) StructAccess: expression1 -> expression2 ID
+
+(25) Write: statement -> expression
+
+(26) Read: statement -> expression
+
+(27) Assignment: statement -> expression1 expression2
+
+(28) IfElse: statement1 -> expression statement2* statement3*
+
+(29) While: statement1 -> expression statement2*
+
+(30) Return: statement -> expression
+
+(31) FunctionInvocation: statement1 -> ID statement2*
+
+
+###############################################################################################################
+######################################### Attribute Grammar ###################################################
+###############################################################################################################
+
+A:
+    expression.type = Type
+    statement.returnType = Type
+    statement.hasReturn = Boolean
+
+R:
+	(3) statement*.foreach(s -> s.returnType = type.returnType);
+
+	    if(!(type.returnType instanceof VoidType) && !statement*.stream().anyMatch(stmt -> stmt.hasReturn)) {
+            new ErrorType("Missing return statement in function " + type.name);
+        }
+	
+	(4) type = VoidType().getInstance();
+	
+	(5) type = IntType().getInstance();
+	
+	(6) type = DoubleType().getInstance();
+	
+	(7) type = CharType().getInstance();
+	
+	(8) type = new ArrayType();
+	
+	(9) type = new FunctionType();
+	
+	(10) type = new StructType();
+	
+	(11) field.type = type.mustBeBuiltIn();
+	
+	(12) expression1.type = expression2.type.arithmetic(expression3.type);
+	
+	(13) expression1.type = expression2.type.logic(expression3.type);
+	
+	(14) expression1.type = expression2.type.comparison(expression3.type);
+	
+	(15) expression.type = IntType().getInstance();
+	
+	(16) expression.type = DoubleType().getInstance();
+	
+	(17) expression.type = CharType().getInstance();
+	 
+	(18) expression.type = definition.type;
+	
+	(19) expression1.type = expression2.type.canBeCastTo(type);
+	
+	(20) expression1.type = expression2.type.logic();
+	
+	(21) expression1.type = expression2.type.arithmetic();
+	
+	(22) List<Type> types = new ArrayList<>();
+		 for(Expression exp : expression*) types.add(exp.type);		 
+		 expression.type = variable.definition.type.parenthesis(types);
+	
+	(23) expression1.type = expression2.type.squareBrackets(expression3.type);
+	
+	(24) expression1.type = expression2.type.dot(field);
+
+	(25) expression.type.mustBeBuiltIn();
+	     stmt.hasReturn = false
+
+    (26) expression.type.mustBeBuiltIn();
+         stmt.hasReturn = false
+
+	(27) expression2.type.mustPromotesTo(expression1.type)
+	     stmt.hasReturn = false;
+	
+	(28) expression.type.mustBeLogical()
+	     statement.hasReturn = statement2*.stream().anyMatch(stmt -> stmt.hasReturn)
+	                         && statement3*.stream().anyMatch(stmt -> stmt.hasReturn)
+	
+	(29) expression.type.mustBeLogical()
+	     statement.hasReturn = statement*.stream().anyMatch(stmt -> stmt.hasReturn)
+	
+	(30) expression.type.mustPromotesTo(statement.returnType)
+	     stmt.hasReturn = true;
+	
+	(31) List<Type> types = new ArrayList<>();
+		 for(Expression exp : expression*) types.add(exp.type);		 
+		 variable.definition.type.parenthesis(types);
+		 stmt.hasReturn = false;
