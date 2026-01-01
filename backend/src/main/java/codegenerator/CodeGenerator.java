@@ -4,47 +4,36 @@ import ast.Definition;
 import ast.Type;
 import ast.definition.VarDefinition;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Objects;
 
 public class CodeGenerator {
-    private final FileWriter out;
+    private final StringBuilder out = new StringBuilder();
     private int labels = 1;
 
-    public CodeGenerator(String outputFile, String inputFile) {
-        try {
-            out = new FileWriter(outputFile);
-            writeNewLine(); out.write("#source " + "\"" + inputFile + "\"" + "\n"); writeNewLine();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public CodeGenerator() {
     }
 
-    public void writeNewLine() {
-        try {
-            out.write("\n");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public String getGeneratedCode() {
+        return out.toString();
+    }
+
+    public void write(String instruction) {
+        out.append(instruction).append("\n");
     }
 
     public void writeTab() {
-        try {
-            out.write("\t");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        out.append("\t");
     }
 
-    private void writeInFile(String ...args) {
-        try {
-            for (String arg : args) out.write(arg);
-            out.write("\n");
-            out.flush();
-        } catch (IOException e) {
-            throw new RuntimeException("Error writing to file", e);
+    public void writeNewLine() {
+        out.append("\n");
+    }
+
+    public void writeInFile(String ...args) {
+        for (String arg : args) {
+            out.append(arg);
         }
+        out.append("\n");
     }
 
     public String nextLabel() {
