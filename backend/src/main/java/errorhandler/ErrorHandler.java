@@ -32,4 +32,8 @@ public class ErrorHandler {
             err.println(errorType.toString());
         }
     }
+
+    public void clearErrors() {
+        this.typesOfErrors.clear();
+    }
 }
