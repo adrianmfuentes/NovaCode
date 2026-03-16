@@ -1,29 +1,44 @@
 let editor;
 let currentGeneratedCode = "";
 
-// Configuración de Monaco Editor
-require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.50.0/min/vs' } });
+// Configuración de Monaco Editor - usando jsdelivr que es más confiable
+require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs' } });
 
+let editorReady = false;
 require(['vs/editor/editor.main'], function () {
-    editor = monaco.editor.create(document.getElementById('monaco-editor'), {
-        value: "def main()->None: {\n    print 'Hola NovaCode';\n}",
-        language: 'cpp', // Usamos C++ como base para el coloreado inicial
-        theme: 'vs-dark',
-        automaticLayout: true,
-        fontSize: 14,
-        fontFamily: 'Fira Code',
-        minimap: { enabled: false },
-        lineNumbers: 'on',
-        padding: { top: 16 },
-        renderWhitespace: 'none',
-        wordWrap: 'on',
-        smoothScrolling: true,
-        cursorStyle: 'line',
-        cursorBlinking: 'blink'
-    });
+    try {
+        editor = monaco.editor.create(document.getElementById('monaco-editor'), {
+            value: "def main()->None: {\n    print 'Hola NovaCode';\n}",
+            language: 'cpp', // Usamos C++ como base para el coloreado inicial
+            theme: 'vs-dark',
+            automaticLayout: true,
+            fontSize: 14,
+            fontFamily: 'Fira Code',
+            minimap: { enabled: false },
+            lineNumbers: 'on',
+            padding: { top: 16 },
+            renderWhitespace: 'none',
+            wordWrap: 'on',
+            smoothScrolling: true,
+            cursorStyle: 'line',
+            cursorBlinking: 'blink'
+        });
+        editorReady = true;
+        console.log('✓ Monaco Editor cargado correctamente');
+    } catch (error) {
+        console.error('✗ Error al inicializar Monaco Editor:', error);
+    }
+}, function (err) {
+    console.error('✗ Error cargando módulos de Monaco:', err);
 });
 
 async function compileCode() {
+    if (!editorReady || !editor) {
+        const outputElement = document.getElementById('console-output');
+        outputElement.innerHTML = '<div class="text-red-500">⚠️ El editor aún se está cargando. Por favor espera un momento...</div>';
+        return;
+    }
+
     const code = editor.getValue();
     const outputElement = document.getElementById('console-output');
     const statusBar = document.getElementById('status-bar');
