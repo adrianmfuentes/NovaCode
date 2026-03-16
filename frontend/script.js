@@ -8,7 +8,7 @@ let editorReady = false;
 require(['vs/editor/editor.main'], function () {
     try {
         editor = monaco.editor.create(document.getElementById('monaco-editor'), {
-            value: "def main()->None: {\n    print 'Hola NovaCode';\n}",
+            value: "def main()->None: {\n    print 'H', 'o', 'l', 'a', ' ', 'N', 'o', 'v', 'a', 'C', 'o', 'd', 'e';\n}",
             language: 'cpp', // Usamos C++ como base para el coloreado inicial
             theme: 'vs-dark',
             automaticLayout: true,
