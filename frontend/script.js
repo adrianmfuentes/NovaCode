@@ -2,25 +2,29 @@ let editor;
 let currentGeneratedCode = "";
 
 // Configuración del API Backend
-// En desarrollo local: http://localhost:8247
-// Por IP directa: http://{misma-ip}:8247
-// En Docker: http://novacode-backend:8080 (comunicación interna)
-// En producción (Nginx): mismo dominio con ruta /api/
-const API_BASE_URL = (() => {
+// En desarrollo local: http://localhost:8247/api/compile
+// Por IP directa: http://{misma-ip}:8247/api/compile
+// En Docker: http://novacode-backend:8080/api/compile
+// En producción (Nginx): /api/compile (mismo dominio)
+const getBackendUrl = () => {
     const hostname = window.location.hostname;
     const protocol = window.location.protocol;
     
     if (hostname === 'localhost') {
         return 'http://localhost:8247';  // Desarrollo local
     } else if (hostname.includes('amfserver.duckdns.org')) {
-        return `${protocol}//${hostname}/api`;  // Producción con mismo dominio
+        return `${protocol}//${hostname}`;  // Producción: mismo dominio (Nginx maneja /api)
     } else if (/^\d+\.\d+\.\d+\.\d+$/.test(hostname)) {
-        // Es una dirección IP - conectar al backend en la misma IP
-        return `http://${hostname}:8247`;
+        return `http://${hostname}:8247`;  // Por IP
     } else {
         return 'http://novacode-backend:8080';  // Docker interno
     }
-})();
+};
+
+const API_BASE_URL = getBackendUrl();
+const COMPILE_ENDPOINT = API_BASE_URL.includes('amfserver.duckdns.org') 
+    ? '/api/compile'  // Por dominio, ruta relativa (Nginx lo redirige)
+    : `${API_BASE_URL}/api/compile`;  // Por IP o localhost
 
 // Configuración de Monaco Editor - usando jsdelivr que es más confiable
 require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs' } });
@@ -70,7 +74,7 @@ async function compileCode() {
     statusBar.className = "h-8 border-t border-gray-800 flex items-center px-4 text-[10px] font-bold uppercase tracking-widest text-blue-500 bg-blue-900/10";
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/compile`, {
+        const response = await fetch(COMPILE_ENDPOINT, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain' },
             body: code
@@ -94,7 +98,8 @@ async function compileCode() {
         }
 
     } catch (error) {
-        outputElement.innerHTML = `<div class="text-red-500">Error de conexión: Asegúrate de que el backend está corriendo en ${API_BASE_URL}.</div>`;
+        console.error('Backend connection error:', error);
+        outputElement.innerHTML = `<div class="text-red-500">Error de conexión: No se pudo conectar al backend en ${COMPILE_ENDPOINT}.</div>`;
         statusBar.innerText = "Error de Servidor";
     }
 }
