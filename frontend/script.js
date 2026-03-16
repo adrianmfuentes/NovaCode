@@ -3,13 +3,20 @@ let currentGeneratedCode = "";
 
 // Configuración del API Backend
 // En desarrollo local: http://localhost:8247
+// Por IP directa: http://{misma-ip}:8247
 // En Docker: http://novacode-backend:8080 (comunicación interna)
 // En producción (Nginx): mismo dominio con ruta /api/
 const API_BASE_URL = (() => {
-    if (window.location.hostname === 'localhost') {
+    const hostname = window.location.hostname;
+    const protocol = window.location.protocol;
+    
+    if (hostname === 'localhost') {
         return 'http://localhost:8247';  // Desarrollo local
-    } else if (window.location.hostname.includes('amfserver.duckdns.org')) {
-        return `${window.location.protocol}//${window.location.hostname}/api`;  // Producción con mismo dominio
+    } else if (hostname.includes('amfserver.duckdns.org')) {
+        return `${protocol}//${hostname}/api`;  // Producción con mismo dominio
+    } else if (/^\d+\.\d+\.\d+\.\d+$/.test(hostname)) {
+        // Es una dirección IP - conectar al backend en la misma IP
+        return `http://${hostname}:8247`;
     } else {
         return 'http://novacode-backend:8080';  // Docker interno
     }
