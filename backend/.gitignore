@@ -25,7 +25,6 @@ coverage/
 dist/
 build/
 out/
-lib/
 *.tsbuildinfo
 
 # Environment variables
