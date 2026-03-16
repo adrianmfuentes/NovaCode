@@ -2,7 +2,7 @@ let editor;
 let currentGeneratedCode = "";
 
 // Configuración de Monaco Editor
-require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.50.0/min/vs' } });
 
 require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(document.getElementById('monaco-editor'), {
@@ -14,7 +14,12 @@ require(['vs/editor/editor.main'], function () {
         fontFamily: 'Fira Code',
         minimap: { enabled: false },
         lineNumbers: 'on',
-        padding: { top: 16 }
+        padding: { top: 16 },
+        renderWhitespace: 'none',
+        wordWrap: 'on',
+        smoothScrolling: true,
+        cursorStyle: 'line',
+        cursorBlinking: 'blink'
     });
 });
 
