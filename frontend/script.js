@@ -2,9 +2,18 @@ let editor;
 let currentGeneratedCode = "";
 
 // Configuración del API Backend
-const API_BASE_URL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:8247'  // Desarrollo local
-    : `${window.location.protocol}//api.novacode.amfserver.duckdns.org`;  // Producción
+// En desarrollo local: http://localhost:8247
+// En Docker: http://novacode-backend:8080 (comunicación interna)
+// En producción (Nginx): https://api.novacode.amfserver.duckdns.org
+const API_BASE_URL = (() => {
+    if (window.location.hostname === 'localhost') {
+        return 'http://localhost:8247';  // Desarrollo local
+    } else if (window.location.hostname.includes('amfserver.duckdns.org')) {
+        return `${window.location.protocol}//api.novacode.amfserver.duckdns.org`;  // Producción con Nginx
+    } else {
+        return 'http://novacode-backend:8080';  // Docker interno
+    }
+})();
 
 // Configuración de Monaco Editor - usando jsdelivr que es más confiable
 require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs' } });
