@@ -1,6 +1,11 @@
 let editor;
 let currentGeneratedCode = "";
 
+// Configuración del API Backend
+const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:8247' 
+    : `http://${window.location.hostname}:8247`;
+
 // Configuración de Monaco Editor - usando jsdelivr que es más confiable
 require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs' } });
 
@@ -49,7 +54,7 @@ async function compileCode() {
     statusBar.className = "h-8 border-t border-gray-800 flex items-center px-4 text-[10px] font-bold uppercase tracking-widest text-blue-500 bg-blue-900/10";
 
     try {
-        const response = await fetch('http://localhost:8080/api/compile', {
+        const response = await fetch(`${API_BASE_URL}/api/compile`, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain' },
             body: code
@@ -73,7 +78,7 @@ async function compileCode() {
         }
 
     } catch (error) {
-        outputElement.innerHTML = `<div class="text-red-500">Error de conexión: Asegúrate de que el backend está corriendo en el puerto 8080.</div>`;
+        outputElement.innerHTML = `<div class="text-red-500">Error de conexión: Asegúrate de que el backend está corriendo en ${API_BASE_URL}.</div>`;
         statusBar.innerText = "Error de Servidor";
     }
 }
