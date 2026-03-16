@@ -3,8 +3,8 @@ let currentGeneratedCode = "";
 
 // Configuración del API Backend
 const API_BASE_URL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:8247' 
-    : `http://${window.location.hostname}:8247`;
+    ? 'http://localhost:8247'  // Desarrollo local
+    : `${window.location.protocol}//api.novacode.amfserver.duckdns.org`;  // Producción
 
 // Configuración de Monaco Editor - usando jsdelivr que es más confiable
 require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs' } });
